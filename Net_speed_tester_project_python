@@ -1,0 +1,41 @@
+from tkinter import *
+import speedtest
+st=speedtest.speedtest()
+
+window =Tk()
+window.geometry("500x400")
+window.title("speedtester")
+# window.configure(bg="cyan")
+
+lbl=Label(window,text="WELCOME IN MY SPEED TESTER. CHECK YOUR INTERNET\nSPEED BY CLICKING ON DESIRED BUTTON.")
+lbl.place(x=80,y=20)
+f=Frame(window,height=2,width=400,bg="black")
+f.pack()
+
+lbl_d=Label(window,text="Downloading Speed : ",bg='lime')
+lbl_d.place(x=100,y=200)
+
+lbl_d=Label(window,text="Uploading Speed      : ",bg='silver')
+lbl_d.place(x=100,y=250)
+
+
+def clicked_d():
+    d1=st.download()
+    d=d1/1000000
+    lbl.configure(text=str(d) +" "+"mb/s")
+    lbl.place(x=300,y=200)
+    
+    
+btn_d=Button(window,bg='red',text="1.DOWNLOAD",command=clicked_d)
+btn_d.place(x=100,y=100)
+
+def clicked_u():
+    d2=st.upload()
+    u=d2/1000000
+    lbl.configure(text=str(u) +" "+"mb/s")
+    lbl.place(x=300,y=250)
+
+btn_u=Button(window,text="2.UPLOADING",command=clicked_u)
+btn_u.place(x=200,y=100)
+
+window.mainloop() 
