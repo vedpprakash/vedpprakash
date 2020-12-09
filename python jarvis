@@ -1,0 +1,129 @@
+import os
+import random
+import pyttsx3
+import datetime
+import speech_recognition as sr
+import webbrowser
+import wolframalpha
+import wikipedia
+client=wolframalpha.Client('X5WPQY-TWYK4X5G4U')
+spot =pyttsx3.init('sapi5')
+voices = spot.getProperty('voices')
+spot.setProperty('voices',voices[1].id)
+
+def speak(audio):
+    spot.say(audio)
+    spot.runAndWait()
+
+def wish():
+    hour=int(datetime.datetime.now().hour)
+    if hour>=0 and hour<12:
+        speak("good morning dude!!")
+
+    elif hour>=12 and hour<18:
+        speak("Good Afternoon dude!!")
+    
+    else:
+        speak("good evening dude!!")
+
+    speak("HOW CAN I HELP YOU.")
+def takein():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening....")
+        r.pause_threshold = 1
+        audio =r.listen(source)
+
+        try:
+        
+            print("Recognizing....")
+            audio=r.recognize_google(audio, language='en-in') 
+            print(f"user said :{audio}\n")
+        except:
+            print("say that again please....\n")
+            return "None"
+    return audio
+
+if __name__ == "__main__":
+    wish()
+    
+    while True:
+        audio=takein().lower()
+        speak(audio)
+        if "wikipedia" in audio:
+            print("Searching wikipedia...")
+            audio=audio.replace("wikipedia","")
+            results=wikipedia.summary(audio, sentences = 2)
+            speak("Acording to wikipedia....")
+            speak(results)
+        elif "quit" in audio or "shut up" in audio:
+            speak("thankyou")
+            break 
+
+        elif "songs" in audio:
+
+            # os.system('D:/mera.mp3')
+            # songs=[mera]
+            # break
+            
+            music = ['D:/Aundi.mp3', 'D:/bol.mp3', 'D:/Haye.mp3', 'D:/mera.mp3']
+            random_music =random.choice(music)
+            os.system(random_music)
+            
+        elif "notepad" in audio:
+            os.system('notepad')
+            break
+        
+
+        elif "hi dude" in audio:
+            speak("hi")
+
+        elif "whatsup" in audio or "how are you" in audio:
+            speak("fine. Doing my work.")
+        elif "shutdown pc" in audio:
+            os.system('shutdown /s')
+            break 
+
+        elif "restart pc" in audio:
+            os.system('shutdown -r')
+            break 
+
+        elif "open youtube" in audio:
+            webbrowser.open('www.youtube.com')
+            break
+
+        elif "open google" in audio:
+            webbrowser.open('www.google.com')
+            break
+
+        elif "open facebook" in audio:
+            webbrowser.open('www.facebook.com')
+            break
+
+       
+        elif "open gmail" in audio:
+            webbrowser.open('www.gmail.com')
+            break
+
+        elif "calculator" in audio:
+            os.system('Calculator')
+
+        elif "terminal" in audio:
+            os.system('Command Prompt')
+
+        else:
+            query=audio
+            if "none" in query:
+                speak('Say that again...')
+                continue
+            speak('Searching...')
+            try:
+                res = client.query(query)
+                results = next(res.results).text
+                print(results)
+                
+                speak(results)
+                break
+            except:
+                pass
+
